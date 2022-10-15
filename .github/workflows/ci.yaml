@@ -1,0 +1,29 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]
+        
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker --version # print the version for logging
+      - run: docker-compose -f docker-compose-build.yaml build --parallel
+      - run: docker tag udagram-frontend tonyray2k420/udagram-frontend:v1
+      - run: docker tag udagram-api-feed tonyray2k420/udagram-api-feed:v1
+      - run: docker tag udagram-api-user tonyray2k420/udagram-api-user:v1
+      - run: docker tag udagram-reverseproxy tonyray2k420/udagram-reverseproxy:v1
+      - run: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - run: docker push tonyray2k420/udagram-frontend:v1
+      - run: docker push tonyray2k420/udagram-api-feed:v1
+      - run: docker push tonyray2k420/udagram-api-user:v
+      - run: docker push tonyray2k420/udagram-reverseproxy:v1

@@ -18,7 +18,7 @@ spec:
       containers:
         - name: frontend
           imagePullPolicy: Always
-          image: tonyray2k420/udagram-frontend:v5
+          image: tonyray2k420/udagram-frontend:v6
           ports:
             - containerPort: 80
           resources:
